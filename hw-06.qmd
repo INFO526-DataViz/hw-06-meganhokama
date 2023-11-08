@@ -1,0 +1,35 @@
+---
+title: "Homework 06"
+author: "INSERT YOUR NAME HERE"
+format:
+  html:
+    embed-resources: true
+toc: true
+---
+
+```{r}
+#| label: setup
+#| message: false
+
+# load packages
+# add packages as needed
+
+```
+
+## 1 - Country populations
+
+```{r}
+#| label: label-me-1
+
+```
+
+## 2 - Meaning of life - The data.
+
+
+## 3 - Meaning of life - The visualization.
+
+
+## 4 - Meaning of life - The app.
+
+
+## 5 - Meaning of life - The styled app.

@@ -1,0 +1,44 @@
+on: push
+name: Check Assignment
+jobs:
+  check-allowed-files:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/gchism94/r_gh_actions:latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Check Files
+      run: |
+        checklist::quit_on_failure({
+          checklist::check_allowed_files(c("hw-06.qmd", "hw-06.Rproj", "README.md", "data/*", "images/*"))
+        })
+      shell: Rscript {0}
+
+  check-renders:
+    env:
+      GITHUB_PAT: ${{ secrets.GH_PAT }}
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/gchism94/r_gh_actions:latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Set knitr version
+      run: |
+        install.packages("remotes")
+        remotes::install_version("knitr", version = "1.42")
+      shell: Rscript {0}
+    - name: Install Missing Packages
+      run: |
+        missing = checklist::install_missing_pkgs(dir = "./", glob = "hw-06.qmd")
+      shell: Rscript {0}
+    - name: Check Renders
+      run: |
+        checklist::check_qmd_renders("hw-06.qmd")
+      shell: Rscript {0}
+    - name: Create artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: hw-06-html
+        path: hw-06.html
