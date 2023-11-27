@@ -9,11 +9,10 @@ sentences. Make a commit at least after finishing each exercise, or
 better yet, more frequently. Push your work regularly to GitHub, and
 make sure all checks pass.
 
-1.  **Country populations (animated).** Recreate the plot you used for For this exercise you will work with data
-    on country populations. The data come from [The
+1.  **Country populations (animated reattempt).** Recreate the plot you used for this exercise from hw-04 on country populations. The data come from [The
     WorldBank](https://data.worldbank.org/indicator/SP.POP.TOTL). The
     dataset you will use is in your `data/` folder and it’s called
-    `country-pop.csv`.
+    `country-pop.csv`. This time, make sure to use only values from actual countries. 
 
 - Load the two dataset using `read_csv()`.
 
@@ -27,7 +26,7 @@ make sure all checks pass.
   Subset the data for just these 10 countries.
 
 - Create a racing bar chart, using **gganimate** for the change in
-  population for these countries.
+  population for these countries. Attempt a different animation layer this time. 
 
 
 ------------------------------------------------------------------------
