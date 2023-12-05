@@ -1,6 +1,6 @@
 ---
 title: "Homework 06"
-author: "INSERT YOUR NAME HERE"
+author: "Megan Hokama"
 format:
   html:
     embed-resources: true
@@ -14,13 +14,121 @@ toc: true
 # load packages
 # add packages as needed
 
+if(!require(pacman))
+  install.packages("pacman")
+
+pacman::p_load(
+  tidyverse,
+  countdown,
+  gt,
+  readxl,
+  gganimate,
+  gifski,
+  knitr,
+  kableExtra,
+  palmerpenguins,
+  transformr,
+  datasauRus,
+  viridis
+)
+
+# set theme for ggplot2
+ggplot2::theme_set(ggplot2::theme_minimal(base_size = 14))
+
+# set width of code output
+options(width = 65)
+
+# set figure parameters for knitr
+knitr::opts_chunk$set(
+  fig.width = 7, # 7" width
+  fig.asp = 0.618, # the golden ratio
+  fig.retina = 3, # dpi multiplier for displaying HTML output on retina
+  fig.align = "center", # center align figures
+  dpi = 300 # higher dpi, sharper image
+)
 ```
 
 ## 1 - Country populations
 
 ```{r}
-#| label: label-me-1
+#| label: redo gganimate plot
 
+#Read data
+country_data <- read_csv("data/country-pop.csv")
+head(country_data)
+
+#Based on previous, skip = 4
+country <- read_csv("data/country-pop.csv", skip = 4)|>
+  janitor::clean_names()
+
+country |>
+  glimpse()
+
+#Top 10 countries in 2020
+top10 <- country[, c("country_name", "x2020")]|>
+  arrange(desc(x2020)) |>
+  head(55)
+
+top10 |>
+  glimpse()
+
+top10 <- country|>  
+  filter(country_name %in% c("China","India", "United States", "Indonesia",
+                             "Pakistan", "Brazil", "Nigeria", "Bangladesh",
+                             "Russian Federation", "Mexico"))
+
+top10year <- top10|>
+  pivot_longer(cols = 5:65, names_to = "year",
+               values_to = "population")|>
+  select("country_name", "population", "year")|>
+  mutate(year = substring(year, 2))|>
+  mutate(year = as.numeric(year))|>
+  group_by(year)|>
+  arrange(year, -population)|>
+  mutate(rank = 1:n())
+
+top10year |>
+  glimpse()
+
+#animation plot 
+staticplot <- ggplot(top10year, aes(rank, group = country_name,
+                                   fill = as.factor(country_name), color = as.factor(country_name))) +
+  geom_tile(aes(y = population/2,
+                height = population,
+                width = 0.9), alpha = 0.8, color = NA) +
+  geom_text(aes(y = 0, label = paste(country_name, " ")), vjust = 0.2, hjust = 1) +
+  geom_text(aes(y = population, label = comma(population), hjust = 0)) +  # Use comma() for formatting
+  coord_flip(clip = "off", expand = FALSE) +
+  scale_y_continuous(labels = scales::comma) +  # Use comma() for formatting
+  scale_x_reverse() +
+  guides(color = "none", fill = "none") +
+  theme(axis.line = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank(),
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_line(linewidth = 0.1, color = "grey"),
+        panel.grid.minor.x = element_line(linewidth = 0.1, color = "grey"),
+        plot.title = element_text(size = 25, hjust = 0.5, face = "bold", colour = "black", vjust = -1),
+        plot.subtitle = element_text(size = 15, hjust = 0.5, face = "italic", color = "black"),
+        plot.caption = element_text(size = 8, hjust = 0.5, face = "italic", color = "black"),
+        plot.background = element_blank(),
+        plot.margin = margin(2, 2, 10, 4, "cm"))
+
+anim <- staticplot + transition_states(year, transition_length = 4, state_length = 1) +
+  view_follow(fixed_x = TRUE)  +
+  labs(title = 'Population per Year with Top 10 Countries : {closest_state}',
+       caption  = "Population | Data Source: The World Bank")
+
+#Create gif
+animate(anim, 200, fps = 20,  width = 1200, height = 1000,
+        renderer = gifski_renderer("gganim.gif"))
 ```
 
 ## 2 - Meaning of life - The data.
