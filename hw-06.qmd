@@ -29,7 +29,8 @@ pacman::p_load(
   palmerpenguins,
   transformr,
   datasauRus,
-  viridis
+  viridis,
+  here
 )
 
 # set theme for ggplot2
@@ -140,13 +141,52 @@ I referenced https://www.r-bloggers.com/2020/01/how-to-create-bar-race-animation
 ```{r}
 #|label: Create dataset
 
+# Create a data frame referencing the data visualization
+life_meaning <- data.frame(
+  country = c("Australia", "New Zealand", "Sweden", "France", "Greece", 
+              "Germany", "Canada", "Singapore", "Italy", "Netherlands", 
+              "Belgium", "Japan", "UK", "U.S.", "Spain", "South Korea", 
+              "Taiwan"),
+  First_Choice = c("Family", "Family", "Family", "Family", "Family", 
+                   "Family", "Family", "Family", "Family/Occupation", 
+                   "Family", "Family", "Family", "Family", "Family", 
+                   "Health", "Material well-being", "Society"),
+  Second_Choice = c("Occupation", "Occupation", "Occupation", "Occupation", 
+                    "Occupation", "Occupation/Health", "Occupation", 
+                    "Occupation", "Family/Occupation", "Material well-being", 
+                    "Material well-being", "Material well-being", "Friends", 
+                    "Friends", "Material well-being", "Health", 
+                    "Material well-being"),
+  Third_Choice = c("Friends", "Friends", "Friends", "Health", "Health", 
+                   "Occupation/Health", "Material well-being", "Society", 
+                   "Material well-being", "Health", "Occupation", 
+                   "Occupation/Health", "Hobbies", "Hobbies", "Occupation", 
+                   "Family", "Family"),
+  Fourth_Choice = c("Material well-being", "Material well-being", 
+                    "Material well-being/Health", "Material well-being", 
+                    "Friends", "Material well-being/General Positive", 
+                    "Friends", "Material well-being", "Health", "Friends", 
+                    "Health", "Occupation/Health", "Occupation", "Occupation", 
+                    "Family", "General Positive", "Freedom"),
+  Fifth_Choice = c("Society", "Society", "Material well-being/Health", 
+                   "Friends", "Hobbies", "Material well-being/General Positive", 
+                   "Society", "Friends", "Friends", "Occupation", "Friends", 
+                   "Hobbies", "Health", "Faith", "Society", "Society/Freedom", 
+                   "Hobbies")
+)
 
-
+# Save the data frame to a CSV file in the data folder
+write.csv(life_meaning, file = "data/life_meaning.csv", row.names = FALSE)
+read.csv()
 
 ```
 
 
 ## 3 - Meaning of life - The visualization.
+```{r}
+#|label: Create alternative visualization
+
+
 
 
 ## 4 - Meaning of life - The app.
