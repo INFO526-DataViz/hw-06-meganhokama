@@ -31,7 +31,8 @@ pacman::p_load(
   datasauRus,
   viridis,
   here,
-  dplyr
+  dplyr,
+  shiny
 )
 
 # set theme for ggplot2
@@ -203,12 +204,24 @@ g+geom_bar(aes(fill=country), width = .5) +
        fill = "Country") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, vjust = .6))+
-  theme(legend.position = "right")
+  theme(legend.position = "right",
+        plot.title = element_text(hjust = .5, face = "bold"))
 
 ```
 Reasoning: For this visualization, I chose a histogram as it displays categorical variables with frequencies of each choice category. It allows viewers to see the relative distribution of each choice category while also allowing us to see the corresponding countries to each choice category. I also wanted to make sure the groups do not have overlapping intervals so the bin values utilized is easier to distinguish between each country.For accessibility, I utilized the viridis palette which is color-blind friendly. I did omit the ranking of each choice category by country so that the visualization can focus on the overall frequency rather than how it was ranked. For this particular visualization, I wanted to display the total frequency of choice category variables to showcase the most prominent values of a satisfying life. 
 
 ## 4 - Meaning of life - The app.
+```{r}
+#|label: Shiny App
 
+#Move data to app data file
+original_path <- "data/life_meaning.csv"
+destination_folder <- "app1/data"
+destination_path <- file.path(destination_folder, basename(original_path))
+
+# Copy the file to the app1/data folder
+file.copy(original_path, destination_path)
+
+```
 
 ## 5 - Meaning of life - The styled app.
