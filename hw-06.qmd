@@ -30,7 +30,8 @@ pacman::p_load(
   transformr,
   datasauRus,
   viridis,
-  here
+  here,
+  dplyr
 )
 
 # set theme for ggplot2
@@ -148,36 +149,37 @@ life_meaning <- data.frame(
               "Belgium", "Japan", "UK", "U.S.", "Spain", "South Korea", 
               "Taiwan"),
   First_Choice = c("Family", "Family", "Family", "Family", "Family", 
-                   "Family", "Family", "Family", "Family/Occupation", 
+                   "Family", "Family", "Family", "Family", 
                    "Family", "Family", "Family", "Family", "Family", 
                    "Health", "Material well-being", "Society"),
   Second_Choice = c("Occupation", "Occupation", "Occupation", "Occupation", 
-                    "Occupation", "Occupation/Health", "Occupation", 
-                    "Occupation", "Family/Occupation", "Material well-being", 
+                    "Occupation", "Occupation", "Occupation", 
+                    "Occupation", "Occupation", "Material well-being", 
                     "Material well-being", "Material well-being", "Friends", 
                     "Friends", "Material well-being", "Health", 
                     "Material well-being"),
   Third_Choice = c("Friends", "Friends", "Friends", "Health", "Health", 
-                   "Occupation/Health", "Material well-being", "Society", 
+                   "Health", "Material well-being", "Society", 
                    "Material well-being", "Health", "Occupation", 
-                   "Occupation/Health", "Hobbies", "Hobbies", "Occupation", 
+                   "Occupation", "Hobbies", "Hobbies", "Occupation", 
                    "Family", "Family"),
   Fourth_Choice = c("Material well-being", "Material well-being", 
-                    "Material well-being/Health", "Material well-being", 
-                    "Friends", "Material well-being/General Positive", 
+                    "Material well-being", "Material well-being", 
+                    "Friends", "Material well-being", 
                     "Friends", "Material well-being", "Health", "Friends", 
-                    "Health", "Occupation/Health", "Occupation", "Occupation", 
+                    "Health", "Health", "Occupation", "Occupation", 
                     "Family", "General Positive", "Freedom"),
-  Fifth_Choice = c("Society", "Society", "Material well-being/Health", 
-                   "Friends", "Hobbies", "Material well-being/General Positive", 
+  Fifth_Choice = c("Society", "Society", "Health", 
+                   "Friends", "Hobbies", "General Positive", 
                    "Society", "Friends", "Friends", "Occupation", "Friends", 
-                   "Hobbies", "Health", "Faith", "Society", "Society/Freedom", 
+                   "Hobbies", "Health", "Faith", "Society", "Society", 
                    "Hobbies")
 )
 
-# Save the data frame to a CSV file in the data folder
+# Save the data frame to a CSV file using the write.csv command
 write.csv(life_meaning, file = "data/life_meaning.csv", row.names = FALSE)
-read.csv()
+
+life_meaning <- read_csv("data/life_meaning.csv")
 
 ```
 
@@ -185,9 +187,26 @@ read.csv()
 ## 3 - Meaning of life - The visualization.
 ```{r}
 #|label: Create alternative visualization
+#Pivot longer 
+life_meaning_long <- tidyr::gather(life_meaning, key = "Choice_Order", value = "Choice", -country)
 
+#Order the Choice variable so that it shows arranges in frequency count
+life_meaning_long$Choice <- factor(life_meaning_long$Choice, levels = names(sort(table(life_meaning_long$Choice), decreasing = TRUE)))
 
+# Create a histogram 
+g <- ggplot(life_meaning_long, aes(x = Choice, fill = country))
+g+geom_bar(aes(fill=country), width = .5) +
+  scale_fill_viridis_d() +
+  labs(title = "Total Frequency of Life Meaning Topics by Country",
+       x = "Choice Category",
+       y = "Total Frequency",
+       fill = "Country") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = .6))+
+  theme(legend.position = "right")
 
+```
+Reasoning: For this visualization, I chose a histogram as it displays categorical variables with frequencies of each choice category. It allows viewers to see the relative distribution of each choice category while also allowing us to see the corresponding countries to each choice category. I also wanted to make sure the groups do not have overlapping intervals so the bin values utilized is easier to distinguish between each country.For accessibility, I utilized the viridis palette which is color-blind friendly. I did omit the ranking of each choice category by country so that the visualization can focus on the overall frequency rather than how it was ranked. For this particular visualization, I wanted to display the total frequency of choice category variables to showcase the most prominent values of a satisfying life. 
 
 ## 4 - Meaning of life - The app.
 
