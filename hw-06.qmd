@@ -224,4 +224,19 @@ file.copy(original_path, destination_path)
 
 ```
 
+Deployed App: https://t1p1qw-megan0marguerite-hokama.shinyapps.io/app1/
+
 ## 5 - Meaning of life - The styled app.
+```{r}
+#|label: Styled App
+
+#Move data to app data file
+original_path <- "data/life_meaning.csv"
+destination_folder <- "app2/data"
+destination_path <- file.path(destination_folder, basename(original_path))
+
+# Copy the file to the app2/data folder
+file.copy(original_path, destination_path)
+
+
+```
