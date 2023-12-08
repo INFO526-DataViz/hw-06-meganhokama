@@ -222,8 +222,6 @@ destination_path <- file.path(destination_folder, basename(original_path))
 # Copy the file to the app1/data folder
 file.copy(original_path, destination_path)
 
-
-
 ```
 
 ## 5 - Meaning of life - The styled app.
