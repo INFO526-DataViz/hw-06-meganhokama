@@ -76,3 +76,6 @@ server <- function(input, output) {
 
 # Create the Shiny app object ------------------------------------------------
 shinyApp(ui = ui, server = server)
+
+
+#Resources: https://rstudio.github.io/thematic/articles/auto.html

@@ -240,3 +240,6 @@ file.copy(original_path, destination_path)
 
 
 ```
+
+#Deployed App
+https://t1p1qw-megan0marguerite-hokama.shinyapps.io/app2/
